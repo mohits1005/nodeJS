@@ -4,15 +4,23 @@ const fs = require('fs');
 
 const os = require('os');
 
-const notes = require('./notes.js')
+const notes = require('./notes.js');
 
-var res = notes.addNote();
+const _ = require('lodash');
 
-console.log(res);
+// console.log(_.isString(true));
+// console.log(_.isString('Mohit'));
 
-var res2 = notes.addFunc(2,3);
+var filteredArray = _.uniq(['Mohit',1,'Mohit',1,2,3,4])
+console.log(filteredArray)
 
-console.log(res2);
+// var res = notes.addNote();
+//
+// console.log(res);
+//
+// var res2 = notes.addFunc(2,3);
+//
+// console.log(res2);
 
 // var user = os.userInfo();
 
