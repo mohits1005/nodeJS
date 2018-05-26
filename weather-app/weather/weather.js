@@ -1,8 +1,8 @@
 const request = require('request');
-//32d6a17ec4f423716861ab90bc8620f7
+//32d6a17ec4f423716861ab90bc86****
 var getWeather = (lat,lng, callback) => {
     request({
-        url:`https://api.darksky.net/forecast/32d6a17ec4f423716861ab90bc8620f7/${lat},${lng}`,
+        url:`https://api.darksky.net/forecast/32d6a17ec4f423716861ab90bc86****/${lat},${lng}`,
         json: true
     },(error,response,body)=>{
         if(!error && response.statusCode === 200)
