@@ -1,0 +1,16 @@
+{
+  "name": "app-testing",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "appium": "^1.8.1",
+    "appium-doctor": "^1.4.3",
+    "webdriverio": "^4.13.1"
+  }
+}
