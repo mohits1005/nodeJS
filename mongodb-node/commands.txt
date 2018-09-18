@@ -1,0 +1,6 @@
+start mongodb servers in Users/mohitsharma/mongo/bin/  ==>  ./mongod --dbpath ~/mongo-data
+run mongodb in Users/mohitsharma/mongo/bin/ ==> ./mongo
+
+Mongodb commands
+db.Todos.insert({text: 'Film new node course'})
+db.Todos.find()
