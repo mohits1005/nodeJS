@@ -7,3 +7,6 @@ db.Todos.find()
 
 Install express, body parser
  npm i express body-parser --save
+
+Testing modules
+npm i expect mocha nodemon supertest --save-dev;
