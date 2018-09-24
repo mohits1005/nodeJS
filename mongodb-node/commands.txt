@@ -4,3 +4,6 @@ run mongodb in Users/mohitsharma/mongo/bin/ ==> ./mongo
 Mongodb commands
 db.Todos.insert({text: 'Film new node course'})
 db.Todos.find()
+
+Install express, body parser
+ npm i express body-parser --save
