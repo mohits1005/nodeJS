@@ -5,18 +5,23 @@ mongoose.connect('mongodb://localhost:27017/TodoApp',{ useNewUrlParser: true });
 
 var Todo = mongoose.model('Todo',{
     text: {
-        type: String
+        type: String,
+        required: true,
+        minlength: 1,
+        trim: true
     },
     completed: {
-        type: Boolean
+        type: Boolean,
+        default: false
     },
     completedAt: {
-        type: Number
+        type: Number,
+        default: null
     }
 });
 var date = new Date();
 var newTodo = new Todo({
-    text: 'Cut Vegetables',
+    text: '   Edit this video        ',
     completed: true,
     completedAt: date.getTime()
 });
