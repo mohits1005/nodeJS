@@ -9,8 +9,24 @@ const todos = [{
     text: 'First test todo'
 },{
     _id: new ObjectID,
-    text: 'Second test todo'
+    text: 'Second test todo',
+    completed: true,
+    completedAt: 12345
 }];
+
+expect.extend({
+	toBeType(received, argument) {
+		const initialType = typeof received;
+		const type = initialType === "object" ? Array.isArray(received) ? "array" : initialType : initialType;
+		return type === argument ? {
+			message: () => `expected ${received} to be type ${argument}`,
+			pass: true
+		} : {
+			message: () => `expected ${received} to be type ${argument}`,
+			pass: false
+		};
+	}
+});
 
 beforeEach((done) => {
     Todo.remove({}).then(() => {
@@ -94,6 +110,39 @@ describe('GET /todos/:id', () => {
             .expect(404)
             .end(done);
     });
+});
+describe('PATCH /todos/:id', () => {
+    it('should update the todo',(done)=> {
+        var hexId = todos[0]._id.toHexString();
+        var text = 'Testing from mocha';
+        var completed = true;
+        request(app)
+            .patch(`/todos/${hexId}`)
+            .send({text, completed})
+            .expect(200)
+            .expect((res) => {
+                expect(res.body.todo.text).toBe(text);
+                expect(res.body.todo.completed).toBe(completed);
+                expect(res.body.todo.completedAt).toBeType("number");
+            })
+            .end(done);
+    });
+    it('should clear completed at when todo is not completed',(done)=> {
+        var hexId = todos[1]._id.toHexString();
+        var text = 'Testing from mocha';
+        var completed = false;
+        request(app)
+            .patch(`/todos/${hexId}`)
+            .send({text, completed})
+            .expect(200)
+            .expect((res) => {
+                expect(res.body.todo.text).toBe(text);
+                expect(res.body.todo.completed).toBe(completed);
+                expect(res.body.todo.completedAt).toBeNull();
+            })
+            .end(done);
+    });
+
 });
 describe('DELETE /todos/:id', () => {
     it('it should remove a todo',(done)=> {
