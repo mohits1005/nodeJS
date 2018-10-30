@@ -1,5 +1,5 @@
 var expect = require('expect');
-var { generateMessage } = require('./message');
+var { generateMessage, generateLocationMessage } = require('./message');
 expect.extend({
     toBeType(received, argument) {
         const initialType = typeof received;
@@ -20,5 +20,16 @@ describe('generateMessage', () => {
         var message = generateMessage(from, text);
         expect(message.createdAt).toBeType('number');
         expect(message).toEqual(expect.objectContaining({ from, text }));
+    });
+});
+describe('generateLocationMessage', () => {
+    it('should generate correct location object', () => {
+        var from = 'Moh';
+        var latitude = 15;
+        var longitude = 19;
+        var url = 'https://www.google.com/maps?q=15,19';
+        var message = generateLocationMessage(from, latitude, longitude);
+        expect(message.createdAt).toBeType('number');
+        expect(message).toEqual(expect.objectContaining({ from, url }));
     });
 });
