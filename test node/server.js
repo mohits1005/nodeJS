@@ -34,7 +34,7 @@ app.get('/tracks/fetch/:name', (req, res) => {
             }, (e) => {
                 reject(e);
             });
-        })
+        }) 
     }
     var findTrackModules = (track) => {
         var module_ids = [];
@@ -47,21 +47,41 @@ app.get('/tracks/fetch/:name', (req, res) => {
             })
         });
         return new Promise((resolve, reject) => {
-            TrackModule.find({ 'module_id': { '$in': module_ids } }).then((track_modules) => {
+            TrackModule.find({ 'module_id': { '$in': module_ids}}).then((track_modules) => {
                 var status = 1;
-                resolve({ status, track, module_ids, track_modules });
+                resolve(track_modules);
             }, (e) => {
                 reject(e);
             });
         })
     }
-    findTrack(name).then((track) => {
-        return findTrackModules(track);
-    }).then((data) => {
+    const getTrackData = async(name) => {
+        const track = await findTrack(name);
+        var module_ids = [];
+        track.modules.forEach(function (element) {
+            module_ids.push(element.module_id);
+            if (element.child === undefined)
+                element.child = [];
+            element.child.forEach(function (inElement) {
+                module_ids.push(inElement.module_id);
+            })
+        });
+        const track_modules = await findTrackModules(track);
+        const status = 1;
+        return { status, track, module_ids, track_modules };
+    };
+    getTrackData(name).then((data) => {
         res.send(data);
     }).catch((errorMessage) => {
         res.send(errorMessage);
     });
+    // findTrack(name).then((track) => {
+    //     return findTrackModules(track);
+    // }).then((data) => {
+    //     res.send(data);
+    // }).catch((errorMessage) => {
+    //     res.send(errorMessage);
+    // });
 });
 app.get('/me', authenticate, (req, res) => {
     res.send("Success");
@@ -100,7 +120,7 @@ app.get('/token', (req, res) => {
         'jti': token_key,
         'iat': time,
         'nbf': time,
-        'exp': time + g_redis_expirey,
+        'exp': time+g_redis_expirey,
         'uid': uid,
         'usr': usr,
         'usr_type': usr_type,
@@ -115,13 +135,13 @@ app.get('/token', (req, res) => {
     var signer = '';
     token = jwt.sign(tokenData, signer);
     //save in redis
-    try {
+    try{
         var host = '';
         var port = 6379;
         var client = redis.createClient(port, host);
         client.set(token_key, token);
-        res.send({ token, token_key });
-    } catch (e) {
+        res.send({token, token_key});
+    }catch(e){
         res.status(403).send(e);
     }
     res.status(403).send('Something went wrong');
